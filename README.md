@@ -1,2 +1,2 @@
-# MITRE-ATTACK-for-ICS-Knowledge-Graph
-engine that automatically creates the knowledge graph of MITRE ATTA&amp;CK for ICS Matrix v18 from its excel file
+# MITRE ATT&CK for ICS Knowledge Graph Builder
+A Python-based engine that automatically builds a knowledge graph from the MITRE ATT&CK for ICS Matrix v18 Excel dataset, modeling relationships between core entities including techniques, tactics, mitigations, detection strategies, software, campaigns, and threat actors.
