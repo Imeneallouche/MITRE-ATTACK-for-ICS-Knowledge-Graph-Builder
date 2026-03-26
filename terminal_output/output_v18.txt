@@ -1,0 +1,107 @@
+
+    ╔══════════════════════════════════════════════════════════════╗
+    ║     MITRE ATT&CK for ICS Knowledge Graph Builder             ║
+    ║                                                              ║
+    ║  This script builds a comprehensive knowledge graph from     ║
+    ║  MITRE ATT&CK ICS data with all critical relationships.      ║
+    ╚══════════════════════════════════════════════════════════════╝
+
+2025-11-12 17:11:57,063 - INFO - Connected to Neo4j at neo4j+s://77d567c6.databases.neo4j.io
+2025-11-12 17:11:57,063 - INFO - Starting knowledge graph build from ics-attack-v18.0.xlsx
+2025-11-12 17:11:59,122 - INFO - Database cleared
+2025-11-12 17:11:59,232 - INFO - Created constraint: (t:Technique)
+2025-11-12 17:11:59,329 - INFO - Created constraint: (t:Tactic)
+2025-11-12 17:11:59,419 - INFO - Created constraint: (s:Software)
+2025-11-12 17:11:59,511 - INFO - Created constraint: (g:Group)
+2025-11-12 17:11:59,605 - INFO - Created constraint: (c:Campaign)
+2025-11-12 17:11:59,705 - INFO - Created constraint: (a:Asset)
+2025-11-12 17:11:59,798 - INFO - Created constraint: (m:Mitigation)
+2025-11-12 17:11:59,895 - INFO - Created constraint: (d:DataComponent)
+2025-11-12 17:11:59,986 - INFO - Created constraint: (a:Analytic)
+2025-11-12 17:12:00,078 - INFO - Created constraint: (d:DetectionStrategy)
+2025-11-12 17:12:00,078 - INFO - Reading Excel file...
+2025-11-12 17:12:00,491 - INFO - Loading 12 tactics...
+2025-11-12 17:12:01,640 - INFO - ✓ Loaded 12 tactics
+2025-11-12 17:12:01,640 - INFO - Loading 83 techniques...
+2025-11-12 17:12:18,478 - INFO - ✓ Loaded 83 techniques
+2025-11-12 17:12:18,478 - INFO - Loading 23 software...
+2025-11-12 17:12:25,846 - INFO - ✓ Loaded 23 software
+2025-11-12 17:12:25,846 - INFO - Loading 14 groups...
+2025-11-12 17:12:36,668 - INFO - ✓ Loaded 14 groups
+2025-11-12 17:12:36,668 - INFO - Loading 7 campaigns...
+2025-11-12 17:12:37,294 - INFO - ✓ Loaded 7 campaigns
+2025-11-12 17:12:37,295 - INFO - Loading 18 assets...
+2025-11-12 17:12:50,504 - INFO - ✓ Loaded 18 assets
+2025-11-12 17:12:50,504 - INFO - Loading 52 mitigations...
+2025-11-12 17:12:56,311 - INFO - ✓ Loaded 52 mitigations
+2025-11-12 17:12:56,312 - INFO - Loading 36 data components...
+2025-11-12 17:13:00,201 - INFO - ✓ Loaded 36 data components
+2025-11-12 17:13:00,201 - INFO - Loading 82 analytics...
+2025-11-12 17:13:09,187 - INFO - ✓ Loaded 82 analytics
+2025-11-12 17:13:09,187 - INFO - Loading 83 detection strategies...
+2025-11-12 17:13:16,937 - INFO - ✓ Loaded 83 detection strategies
+2025-11-12 17:13:16,937 - INFO - Loading matrix relationships...
+2025-11-12 17:13:26,251 - INFO - ✓ Created 94 Tactic-Technique relationships from matrix
+2025-11-12 17:13:26,251 - INFO - 
+=== Analyzing Relationships Sheet ===
+2025-11-12 17:13:26,253 - INFO - Source types found: ['campaign', 'detectionstrategy', 'mitigation', 'technique', 'group', 'software']
+2025-11-12 17:13:26,253 - INFO - Target types found: ['group', 'technique', 'asset', 'software']
+2025-11-12 17:13:26,253 - INFO - Mapping types found: ['attributed-to', 'detects', 'mitigates', 'targets', 'uses']
+2025-11-12 17:13:26,253 - INFO - 
+Relationship type distribution:
+2025-11-12 17:13:26,254 - INFO -   targets: 685
+2025-11-12 17:13:26,254 - INFO -   mitigates: 331
+2025-11-12 17:13:26,254 - INFO -   uses: 267
+2025-11-12 17:13:26,254 - INFO -   detects: 83
+2025-11-12 17:13:26,254 - INFO -   attributed-to: 5
+2025-11-12 17:13:26,254 - INFO - 
+Sample relationships:
+2025-11-12 17:13:26,254 - INFO -   campaign(C0028) -[attributed-to]-> group(G0034)
+2025-11-12 17:13:26,254 - INFO -   campaign(C0025) -[attributed-to]-> group(G0034)
+2025-11-12 17:13:26,255 - INFO -   campaign(C0034) -[attributed-to]-> group(G0034)
+2025-11-12 17:13:26,255 - INFO -   campaign(C0030) -[attributed-to]-> group(G0088)
+2025-11-12 17:13:26,255 - INFO -   campaign(C0031) -[attributed-to]-> group(G1027)
+2025-11-12 17:13:26,255 - INFO -   detectionstrategy(DET0802) -[detects]-> technique(T0800)
+2025-11-12 17:13:26,255 - INFO -   detectionstrategy(DET0764) -[detects]-> technique(T0830)
+2025-11-12 17:13:26,255 - INFO -   detectionstrategy(DET0728) -[detects]-> technique(T0878)
+2025-11-12 17:13:26,255 - INFO -   detectionstrategy(DET0734) -[detects]-> technique(T0802)
+2025-11-12 17:13:26,255 - INFO -   detectionstrategy(DET0748) -[detects]-> technique(T0895)
+2025-11-12 17:13:26,255 - INFO - Loading 1371 relationships...
+2025-11-12 17:15:25,666 - INFO - 
+=== Relationship Creation Summary ===
+2025-11-12 17:15:25,667 - INFO -   ✓ Created 5 ATTRIBUTED_TO relationships
+2025-11-12 17:15:25,667 - INFO -   ✓ Created 83 DETECTS relationships
+2025-11-12 17:15:25,667 - INFO -   ✓ Created 331 MITIGATES relationships
+2025-11-12 17:15:25,667 - INFO -   ✓ Created 685 TARGETS relationships
+2025-11-12 17:15:25,667 - INFO -   ✓ Created 267 USES relationships
+2025-11-12 17:15:25,669 - INFO - ✓ Loaded 1371 relationships
+2025-11-12 17:15:25,743 - INFO - Created index: (t:Technique)
+2025-11-12 17:15:25,821 - INFO - Created index: (t:Tactic)
+2025-11-12 17:15:25,940 - INFO - Created index: (s:Software)
+2025-11-12 17:15:26,899 - INFO - Created index: (g:Group)
+2025-11-12 17:15:26,971 - INFO - Created index: (c:Campaign)
+2025-11-12 17:15:27,044 - INFO - Created index: (a:Asset)
+2025-11-12 17:15:27,120 - INFO - Created index: (m:Mitigation)
+2025-11-12 17:15:27,123 - INFO - 
+==================================================
+2025-11-12 17:15:27,123 - INFO - 
+=== Node Statistics ===
+2025-11-12 17:15:27,279 - INFO - Analytic: 82
+2025-11-12 17:15:27,355 - INFO - Asset: 18
+2025-11-12 17:15:27,433 - INFO - Campaign: 7
+2025-11-12 17:15:27,509 - INFO - DataComponent: 36
+2025-11-12 17:15:27,587 - INFO - DetectionStrategy: 83
+2025-11-12 17:15:27,660 - INFO - Group: 14
+2025-11-12 17:15:27,735 - INFO - Mitigation: 52
+2025-11-12 17:15:27,810 - INFO - Software: 23
+2025-11-12 17:15:27,885 - INFO - Tactic: 12
+2025-11-12 17:15:27,959 - INFO - Technique: 83
+2025-11-12 17:15:27,960 - INFO - Total Nodes: 410
+2025-11-12 17:15:27,960 - INFO - 
+=== Relationship Statistics ===
+2025-11-12 17:15:28,116 - INFO - ATTRIBUTED_TO: 5
+2025-11-12 17:15:28,192 - INFO - MITIGATES: 331
+2025-11-12 17:15:28,267 - INFO - TARGETS: 685
+2025-11-12 17:15:28,345 - INFO - USES: 361
+2025-11-12 17:15:28,345 - INFO - Total Relationships: 1382
+2025-11-12 17:15:28,345 - INFO - 

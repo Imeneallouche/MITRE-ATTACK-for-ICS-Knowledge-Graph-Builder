@@ -1,0 +1,78 @@
+
+    ╔══════════════════════════════════════════════════════════════╗
+    ║     MITRE ATT&CK for ICS Knowledge Graph Builder             ║
+    ║                                                              ║
+    ║  This script builds a comprehensive knowledge graph from     ║
+    ║  MITRE ATT&CK ICS data with all critical relationships.      ║
+    ╚══════════════════════════════════════════════════════════════╝
+    
+2025-11-12 15:57:29,654 - INFO - Connected to Neo4j database
+2025-11-12 15:57:29,654 - INFO - Starting to build Knowledge Graph from ics-attack-v17.1.xlsx
+2025-11-12 15:57:29,654 - INFO - Reading Excel file...
+2025-11-12 15:57:32,305 - INFO - Database cleared
+2025-11-12 15:57:32,715 - INFO - Created constraint: (t:Technique)
+2025-11-12 15:57:32,843 - INFO - Created constraint: (t:Tactic)
+2025-11-12 15:57:32,962 - INFO - Created constraint: (s:Software)
+2025-11-12 15:57:33,126 - INFO - Created constraint: (g:Group)
+2025-11-12 15:57:33,328 - INFO - Created constraint: (c:Campaign)
+2025-11-12 15:57:33,535 - INFO - Created constraint: (a:Asset)
+2025-11-12 15:57:33,738 - INFO - Created constraint: (m:Mitigation)
+2025-11-12 15:57:33,946 - INFO - Created constraint: (d:DataSource)
+2025-11-12 15:57:33,947 - INFO - Creating 83 Technique nodes...
+2025-11-12 15:57:43,508 - INFO - Technique nodes created successfully
+2025-11-12 15:57:43,508 - INFO - Creating 12 Tactic nodes...
+2025-11-12 15:57:45,036 - INFO - Tactic nodes created successfully
+2025-11-12 15:57:45,036 - INFO - Creating 23 Software nodes...
+2025-11-12 15:57:47,505 - INFO - Software nodes created successfully
+2025-11-12 15:57:47,506 - INFO - Creating 14 Group nodes...
+2025-11-12 15:57:49,066 - INFO - Group nodes created successfully
+2025-11-12 15:57:49,066 - INFO - Creating 7 Campaign nodes...
+2025-11-12 15:57:49,927 - INFO - Campaign nodes created successfully
+2025-11-12 15:57:49,927 - INFO - Creating 14 Asset nodes...
+2025-11-12 15:57:51,480 - INFO - Asset nodes created successfully
+2025-11-12 15:57:51,481 - INFO - Creating 52 Mitigation nodes...
+2025-11-12 15:57:58,089 - INFO - Mitigation nodes created successfully
+2025-11-12 15:57:58,089 - INFO - Creating 53 DataSource nodes...
+2025-11-12 15:58:05,011 - INFO - DataSource nodes created successfully
+2025-11-12 15:58:05,011 - INFO - Creating Tactic --USES--> Technique relationships...
+2025-11-12 15:58:16,048 - INFO - Created 94 Tactic --USES--> Technique relationships
+2025-11-12 15:58:16,049 - INFO - Creating relationships from matrix sheet...
+2025-11-12 15:58:26,425 - INFO - Created 94 relationships from matrix
+2025-11-12 15:58:26,425 - INFO - Creating DataSource --DETECTS--> Technique relationships...
+2025-11-12 15:58:55,808 - INFO - Created 238 DataSource --DETECTS--> Technique relationships
+2025-11-12 15:58:55,808 - INFO - Processing 1365 relationships from relationships sheet...
+2025-11-12 16:01:06,990 - INFO - Created 5 ATTRIBUTED_TO relationships
+2025-11-12 16:01:06,990 - INFO - Created 331 MITIGATED_BY relationships
+2025-11-12 16:01:06,990 - INFO - Created 524 TARGETED_BY relationships
+2025-11-12 16:01:06,990 - INFO - Created 5 USES relationships
+2025-11-12 16:01:06,990 - INFO - Created 83 USES_TECHNIQUE relationships
+2025-11-12 16:01:06,990 - INFO - Created 16 USES_SOFTWARE relationships
+2025-11-12 16:01:06,990 - INFO - Created 163 APPLIES_TECHNIQUE relationships
+2025-11-12 16:01:06,990 - INFO - Creating Asset --TARGETED_BY--> Technique relationships...
+2025-11-12 16:01:07,051 - INFO - Created 0 Asset --TARGETED_BY--> Technique relationships
+2025-11-12 16:01:07,051 - INFO - ============================================================
+2025-11-12 16:01:07,052 - INFO - Knowledge Graph Statistics
+2025-11-12 16:01:07,052 - INFO - ============================================================
+2025-11-12 16:01:07,245 - INFO - Technique nodes: 83
+2025-11-12 16:01:07,345 - INFO - Tactic nodes: 12
+2025-11-12 16:01:07,449 - INFO - Software nodes: 23
+2025-11-12 16:01:07,552 - INFO - Group nodes: 14
+2025-11-12 16:01:07,650 - INFO - Campaign nodes: 7
+2025-11-12 16:01:07,749 - INFO - Asset nodes: 14
+2025-11-12 16:01:07,848 - INFO - Mitigation nodes: 52
+2025-11-12 16:01:07,945 - INFO - DataSource nodes: 53
+2025-11-12 16:01:07,946 - INFO - ------------------------------------------------------------
+2025-11-12 16:01:08,063 - INFO - Relationships:
+2025-11-12 16:01:08,076 - INFO -   TARGETED_BY: 524
+2025-11-12 16:01:08,076 - INFO -   MITIGATED_BY: 331
+2025-11-12 16:01:08,076 - INFO -   DETECTS: 238
+2025-11-12 16:01:08,076 - INFO -   APPLIES_TECHNIQUE: 163
+2025-11-12 16:01:08,076 - INFO -   USES: 99
+2025-11-12 16:01:08,076 - INFO -   USES_TECHNIQUE: 83
+2025-11-12 16:01:08,077 - INFO -   USES_SOFTWARE: 16
+2025-11-12 16:01:08,077 - INFO -   ATTRIBUTED_TO: 5
+2025-11-12 16:01:08,179 - INFO - 
+Total relationships: 1459
+2025-11-12 16:01:08,180 - INFO - ============================================================
+2025-11-12 16:01:08,180 - INFO - Knowledge Graph built successfully in 218.53 seconds
+2025-11-12 16:01:08,180 - INFO - Closed Neo4j connection
