@@ -3,12 +3,26 @@ MITRE ATT&CK for ICS VERSION 18 Knowledge Graph Builder
 Converts Excel file with MITRE ATT&CK ICS VERSION 18 data into Neo4j Knowledge Graph
 """
 
+import logging
+import re
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import pandas as pd
 from neo4j import GraphDatabase
-import logging
-from typing import Dict, List, Any, Optional
-from datetime import datetime
-import re
+
+_REPO = Path(__file__).resolve().parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from config import (
+    ConfigurationError,
+    get_clear_database_default,
+    get_neo4j_credentials,
+    path_v18_matrix_excel,
+    safe_log_neo4j_target,
+)
 
 # Configure logging
 logging.basicConfig(
@@ -31,7 +45,7 @@ class MITREKnowledgeGraphBuilder:
             password: Neo4j password
         """
         self.driver = GraphDatabase.driver(uri, auth=(username, password))
-        logger.info(f"Connected to Neo4j at {uri}")
+        logger.info("Connected to Neo4j at %s", safe_log_neo4j_target(uri))
     
     def close(self):
         """Close Neo4j connection"""
@@ -773,26 +787,30 @@ class MITREKnowledgeGraphBuilder:
 
 def main():
     """
-    Main execution function with example usage
+    Main execution function with example usage.
+    Configuration: ``.env`` / environment (see ``.env.example``).
     """
-    # Configuration
-    NEO4J_URI = "YOUR_NEO4J_URI"  
-    NEO4J_USERNAME = "YOUR_NEO4J_USERNAME"
-    NEO4J_PASSWORD = "YOUR_NEO4J_PASSWORD"
-    EXCEL_FILE = "input/ics-attack-v18.0.xlsx"
-    
+    try:
+        uri, username, password = get_neo4j_credentials()
+    except ConfigurationError as e:
+        logger.error("%s", e)
+        sys.exit(1)
+
+    excel_path = path_v18_matrix_excel()
+    clear_db = get_clear_database_default()
+
     # Create builder instance
     builder = MITREKnowledgeGraphBuilder(
-        uri=NEO4J_URI,
-        username=NEO4J_USERNAME,
-        password=NEO4J_PASSWORD
+        uri=uri,
+        username=username,
+        password=password,
     )
     
     try:
         # Build the knowledge graph
         builder.build_knowledge_graph(
-            excel_file=EXCEL_FILE,
-            clear_existing=True  # Set to False to append to existing data
+            excel_file=str(excel_path),
+            clear_existing=clear_db,
         )
         
         # Example queries to verify the graph
@@ -892,14 +910,11 @@ if __name__ == "__main__":
     
     2. Ensure Neo4j is running (default: bolt://localhost:7687)
     
-    3. Update configuration in main() function:
-       - NEO4J_URI: Your Neo4j connection URI
-       - NEO4J_USERNAME: Your Neo4j username (default: neo4j)
-       - NEO4J_PASSWORD: Your Neo4j password
-       - EXCEL_FILE: Path to your MITRE ATT&CK ICS Excel file
+    3. Copy .env.example to .env and set NEO4J_URI, NEO4J_USER (or NEO4J_USERNAME), NEO4J_PASSWORD
+       Optional: MITRE_ICS_V18_EXCEL, MITRE_KG_CLEAR_EXISTING (true/false)
     
     4. Run the script:
-       python mitre_kg_builder.py
+       python mitre_ics_matrix_v18_to_kg.py
     
     Note: This script uses APOC procedures for statistics.
     If APOC is not installed, comment out the get_statistics() call

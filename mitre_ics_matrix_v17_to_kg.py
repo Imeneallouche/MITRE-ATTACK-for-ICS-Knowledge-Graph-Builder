@@ -3,12 +3,20 @@ MITRE ATT&CK for ICS VERSION 17 Knowledge Graph Builder
 Converts Excel file with MITRE ATT&CK ICS VERSION 17 data into a Neo4j Knowledge Graph
 """
 
-import pandas as pd
-import re
-from neo4j import GraphDatabase
-from typing import Dict, List, Any, Optional
 import logging
+import re
+import sys
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import pandas as pd
+from neo4j import GraphDatabase
+
+_REPO = Path(__file__).resolve().parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from config import ConfigurationError, get_neo4j_credentials, path_v17_matrix_excel
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -650,12 +658,14 @@ class MITREAttackKGBuilder:
 
 
 def main():
-    """Main execution function"""
-    # Configuration
-    NEO4J_URI = "YOUR_URI"
-    NEO4J_USERNAME = "YOUR_USERNAME"
-    NEO4J_PASSWORD = "YOUR_PASSWORD"
-    EXCEL_FILE = "input/ics-attack-v17.1.xlsx"
+    """Main execution function. Neo4j settings from ``.env`` (see ``.env.example``)."""
+    try:
+        uri, username, password = get_neo4j_credentials()
+    except ConfigurationError as e:
+        logger.error("%s", e)
+        sys.exit(1)
+
+    excel_path = path_v17_matrix_excel()
 
     print("""
     ╔══════════════════════════════════════════════════════════════╗
@@ -667,10 +677,10 @@ def main():
     """)
     
     # Build the knowledge graph
-    builder = MITREAttackKGBuilder(NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD)
+    builder = MITREAttackKGBuilder(uri, username, password)
     
     try:
-        builder.build_knowledge_graph(EXCEL_FILE)
+        builder.build_knowledge_graph(str(excel_path))
     finally:
         builder.close()
 

@@ -1,3 +1,7 @@
 pandas
 neo4j
 openpyxl
+python-dotenv>=1.0.0
+requests
+beautifulsoup4
+lxml

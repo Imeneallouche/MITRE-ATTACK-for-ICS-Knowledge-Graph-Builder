@@ -5,10 +5,23 @@ Adds relationships between:
 2. Analytic -> DataComponent (USES relationship)
 """
 
+import logging
+import sys
+from pathlib import Path
+from typing import List, Optional
+
 import pandas as pd
 from neo4j import GraphDatabase
-import logging
-from typing import List, Optional
+
+_REPO = Path(__file__).resolve().parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from config import (
+    ConfigurationError,
+    get_neo4j_credentials,
+    path_v18_complementary_excel,
+    safe_log_neo4j_target,
+)
 
 # Configure logging
 logging.basicConfig(
@@ -31,7 +44,7 @@ class MITRERelationshipAdder:
             password: Neo4j password
         """
         self.driver = GraphDatabase.driver(uri, auth=(username, password))
-        logger.info(f"Connected to Neo4j at {uri}")
+        logger.info("Connected to Neo4j at %s", safe_log_neo4j_target(uri))
     
     def close(self):
         """Close Neo4j connection"""
@@ -365,13 +378,14 @@ class MITRERelationshipAdder:
 
 
 def main():
-    """Main execution function"""
-    
-    # Configuration - UPDATE THESE VALUES
-    NEO4J_URI = "YOUR_NEO4J_URI"
-    NEO4J_USERNAME = "YOUR_NEO4J_USERNAME"
-    NEO4J_PASSWORD = "YOUR_NEO4J_PASSWORD"
-    EXCEL_FILE = "input/ics-attack-v18.0-complementary.xlsx"
+    """Main execution function. Neo4j and paths from ``.env`` (see ``.env.example``)."""
+    try:
+        uri, username, password = get_neo4j_credentials()
+    except ConfigurationError as e:
+        logger.error("%s", e)
+        sys.exit(1)
+
+    excel_path = path_v18_complementary_excel()
     
     print("""
     ╔══════════════════════════════════════════════════════════════╗
@@ -385,14 +399,14 @@ def main():
     
     # Create relationship adder instance
     adder = MITRERelationshipAdder(
-        uri=NEO4J_URI,
-        username=NEO4J_USERNAME,
-        password=NEO4J_PASSWORD
+        uri=uri,
+        username=username,
+        password=password,
     )
     
     try:
         # Process the complementary file and add relationships
-        adder.process_complementary_file(EXCEL_FILE)
+        adder.process_complementary_file(str(excel_path))
         
         # Show some example queries to explore the new relationships
         logger.info("\n=== Example Queries to Explore New Relationships ===")
@@ -433,11 +447,8 @@ if __name__ == "__main__":
     
     2. Ensure your Neo4j database is running with existing nodes
     
-    3. Update configuration in main() function:
-       - NEO4J_URI: Your Neo4j connection URI
-       - NEO4J_USERNAME: Your Neo4j username
-       - NEO4J_PASSWORD: Your Neo4j password
-       - EXCEL_FILE: Path to your complementary Excel file
+    3. Copy .env.example to .env; set NEO4J_URI, NEO4J_USER (or NEO4J_USERNAME), NEO4J_PASSWORD
+       Optional: MITRE_ICS_V18_COMPLEMENTARY_EXCEL
     
     4. Run the script:
        python add_missing_relationships.py

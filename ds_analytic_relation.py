@@ -1,6 +1,14 @@
-import pandas as pd
 import re
+import sys
+from pathlib import Path
 from typing import Optional
+
+import pandas as pd
+
+_REPO = Path(__file__).resolve().parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from config import path_detection_strategy_mapping_input, path_detection_strategy_mapping_output
 
 def extract_detection_strategy_id(url: str) -> Optional[str]:
     """
@@ -145,15 +153,13 @@ def create_analytic_detection_strategy_mapping(input_file: str, output_file: str
         print(f"Analytics without detection strategy mapping: {list(failed_analytics['analytic_ID'])}")
 
 def main():
-    """Main execution function."""
-    
-    # Configuration
-    INPUT_FILE = "input/ics-attack-v18.0.xlsx"  
-    OUTPUT_FILE = "analytic_detectionstrategy_mapping.xlsx"
-    SHEET_NAME = "analytics" 
-    
-    # Run the mapping process
-    create_analytic_detection_strategy_mapping(INPUT_FILE, OUTPUT_FILE, SHEET_NAME)
+    """Main execution function. I/O paths from ``.env`` (see ``.env.example``)."""
+    input_path = path_detection_strategy_mapping_input()
+    output_path = path_detection_strategy_mapping_output()
+    sheet_name = "analytics"
+    create_analytic_detection_strategy_mapping(
+        str(input_path), str(output_path), sheet_name
+    )
     
     print("\n✓ Process completed!")
 

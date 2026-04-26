@@ -1,9 +1,17 @@
+import re
+import sys
+import time
+from pathlib import Path
+from typing import List, Tuple
+
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-import time
-import re
-from typing import List, Tuple
+
+_REPO = Path(__file__).resolve().parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from config import path_datacomponent_scraper_input, path_datacomponent_scraper_output
 
 def extract_data_components_from_url(url: str) -> Tuple[List[str], List[str]]:
     """
@@ -153,12 +161,10 @@ def process_analytics_excel(input_file: str, output_file: str):
     print(f"  Analytics without data components: {without_components}")
 
 if __name__ == "__main__":
-    # Configuration
-    INPUT_FILE = "input/ics-attack-v18.0.xlsx"  
-    OUTPUT_FILE = "analytics_with_datacomponents.xlsx"
-    
+    input_path = path_datacomponent_scraper_input()
+    output_path = path_datacomponent_scraper_output()
     print("MITRE ATT&CK Analytics Data Component Scraper")
     print("=" * 60)
-    
-    # Process the file
-    process_analytics_excel(INPUT_FILE, OUTPUT_FILE)
+    print(f"Input:  {input_path}")
+    print(f"Output: {output_path}")
+    process_analytics_excel(str(input_path), str(output_path))
